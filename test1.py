@@ -68,6 +68,31 @@ def run_test():
 
     except Exception as e:
         print(f"❌ 에러가 발생했습니다: {e}")
+        
+        
+def run_free_check(count=5):
+    """무료 구간 확인용 함수: 짧은 질문을 여러 번 던짐"""
+    print(f"🧪 [무료 체크 모드] {count}회 반복 호출 시작...")
+    print(f"📍 현재 모델: {TARGET_MODEL}")
+    print("이 작업이 끝나고 웹사이트의 크레딧 변화를 확인하세요.")
+    print("-" * 50)
+
+    for i in range(1, count + 1):
+        try:
+            # 아주 짧은 토큰만 사용하도록 설정
+            response = client.chat.completions.create(
+                model=TARGET_MODEL,
+                messages=[{"role": "user", "content": "hi"}],
+                max_tokens=5 # 답변 길이를 강제로 제한해서 토큰을 아낍니다
+            )
+            print(f"[{i}/{count}] 호출 성공 - 소모 토큰: {response.usage.total_tokens}")
+        except Exception as e:
+            print(f"[{i}/{count}] 실패: {e}")        
 
 if __name__ == "__main__":
-    run_test()
+    now_credit=2924
+    print(now_credit,"\n")
+    #런테스트는 일반질문용
+   # run_test()
+   # 무료 구간(1점이라도 깎이는지)을 확인하고 싶을 때는 아래 줄을 사용
+    #run_free_check(count=100) # 100번 반복 호출해봅니다
